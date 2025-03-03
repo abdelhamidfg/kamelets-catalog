@@ -33,13 +33,7 @@ spec:
             parameters:
               httpUri: my-microcksinstall-microcks.apps.cluster.ocp-hamid.com/rest/Customer+Mgmt/1.0.0/customer
             uri: https
-        - step:
-            steps:
-              - to:
-                  id: kaoto-datamapper-xslt-2034
-                  parameters: {}
-                  uri: xslt-saxon:kaoto-datamapper-bca88c35.xsl
-            id: kaoto-datamapper-bca88c35
+        
       uri: kamelet:source
   types:
     out:
