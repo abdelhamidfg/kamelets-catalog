@@ -1,0 +1,46 @@
+apiVersion: camel.apache.org/v1alpha1
+kind: Kamelet
+metadata:
+  annotations: {}
+  labels:
+    camel.apache.org/kamelet-type: sink
+  name: customer-profile
+spec:
+  definition:
+    description: Retrieves a customer profile from an external HTTP service.
+    properties:
+      serviceUrl:
+        default: https://my-microcksinstall-microcks.apps.cluster.ocp-hamid.com/rest/Customer+Mgmt/1.0.0/customer
+        description: >
+          The base URL of the external customer profile service. The provided
+          customerId will be appended to this URL.
+        title: Customer Service URL
+        type: string
+    required:
+      - serviceUrl
+    title: Customer Profile Action
+  dependencies:
+    - camel:core
+    - camel:http
+  template:
+    from:
+      steps:
+        - setHeader:
+            constant: GET
+            name: CamelHttpMethod
+        - toD:
+            description: get customer profile
+            parameters:
+              httpUri: my-microcksinstall-microcks.apps.cluster.ocp-hamid.com/rest/Customer+Mgmt/1.0.0/customer
+            uri: https
+        - step:
+            steps:
+              - to:
+                  id: kaoto-datamapper-xslt-2034
+                  parameters: {}
+                  uri: xslt-saxon:kaoto-datamapper-bca88c35.xsl
+            id: kaoto-datamapper-bca88c35
+      uri: kamelet:source
+  types:
+    out:
+      mediaType: application/json
